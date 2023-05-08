@@ -13,8 +13,8 @@ const App = () => {
         <Text style={styles.tituloBold}>Veterinaria</Text>
       </Text>
 
-      <Pressable onPress={nuevaCitaHandler}>
-        <Text>Nueva Cita</Text>
+      <Pressable onPress={nuevaCitaHandler} style={styles.btnNuevaCita}>
+        <Text style={styles.btnTextoNuevaCita}>Nueva Cita</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -34,6 +34,20 @@ const styles = StyleSheet.create({
   tituloBold: {
     fontWeight: '900',
     color: '#6D28D9',
+  },
+  btnNuevaCita: {
+    backgroundColor: '#6D28D9',
+    padding: 15,
+    marginTop: 30,
+    marginHorizontal: 20,
+    borderRadius: 10,
+  },
+  btnTextoNuevaCita: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
 });
 
