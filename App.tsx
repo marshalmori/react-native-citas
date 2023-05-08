@@ -1,7 +1,11 @@
 import React from 'react';
-import {SafeAreaView, Text, StyleSheet, Button} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, Button, Pressable} from 'react-native';
 
 const App = () => {
+  const nuevaCitaHandler = () => {
+    console.log('Diste click...');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.titulo}>
@@ -9,12 +13,9 @@ const App = () => {
         <Text style={styles.tituloBold}>Veterinaria</Text>
       </Text>
 
-      <Button
-        title="Nueva Cita"
-        onPress={() => {
-          console.log('Pressionando o botão');
-        }}
-      />
+      <Pressable onPress={nuevaCitaHandler}>
+        <Text>Nueva Cita</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
