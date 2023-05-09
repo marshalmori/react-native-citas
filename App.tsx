@@ -1,16 +1,11 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  Button,
-  Pressable,
-  Modal,
-} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, Text, StyleSheet, Pressable, Modal} from 'react-native';
 
 const App = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const nuevaCitaHandler = () => {
-    console.log('Diste click...');
+    setModalVisible(true);
   };
 
   return (
@@ -24,7 +19,7 @@ const App = () => {
         <Text style={styles.btnTextoNuevaCita}>Nueva Cita</Text>
       </Pressable>
 
-      <Modal animationType="slide" visible={false}>
+      <Modal animationType="slide" visible={modalVisible}>
         <Text>Desde Modal</Text>
       </Modal>
     </SafeAreaView>
