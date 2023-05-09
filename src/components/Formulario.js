@@ -41,6 +41,14 @@ const Formulario = ({
     };
 
     setPacientes([...pacientes, nuevoPaciente]);
+    setModalVisible(!modalVisible);
+
+    setPaciente('');
+    setProprietario('');
+    setEmail('');
+    setTelefono('');
+    setFecha(new Date());
+    setSintomas('');
   };
 
   return (
