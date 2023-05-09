@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   Modal,
@@ -10,6 +10,12 @@ import {
 } from 'react-native';
 
 const Formulario = ({modalVisible}) => {
+  const [paciente, setPaciente] = useState('');
+  const [proprietario, setProprietario] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [sintomas, setSintomas] = useState('');
+
   return (
     <Modal animationType="slide" visible={modalVisible}>
       <SafeAreaView style={styles.contenido}>
@@ -24,6 +30,8 @@ const Formulario = ({modalVisible}) => {
               style={styles.input}
               placeholder="Nombre Paciente"
               placeholderTextColor={'#666'}
+              value={paciente}
+              onChangeText={setPaciente}
             />
           </View>
 
@@ -33,6 +41,8 @@ const Formulario = ({modalVisible}) => {
               style={styles.input}
               placeholder="Nombre Proprietario"
               placeholderTextColor={'#666'}
+              value={proprietario}
+              onChangeText={setProprietario}
             />
           </View>
 
@@ -43,6 +53,8 @@ const Formulario = ({modalVisible}) => {
               placeholder="Email Proprietario"
               placeholderTextColor={'#666'}
               keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
 
@@ -53,6 +65,22 @@ const Formulario = ({modalVisible}) => {
               placeholder="Teléfono Proprietario"
               placeholderTextColor={'#666'}
               keyboardType="number-pad"
+              value={telefono}
+              onChangeText={setTelefono}
+              maxLength={11}
+            />
+          </View>
+
+          <View style={styles.campo}>
+            <Text style={styles.label}>Síntomas</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Síntomas"
+              placeholderTextColor={'#666'}
+              value={sintomas}
+              onChangeText={setSintomas}
+              multiline={true}
+              numberOfLines={4}
             />
           </View>
         </ScrollView>
