@@ -8,12 +8,14 @@ import {
   View,
   ScrollView,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 const Formulario = ({modalVisible}) => {
   const [paciente, setPaciente] = useState('');
   const [proprietario, setProprietario] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
+  const [fecha, setFecha] = useState(new Date());
   const [sintomas, setSintomas] = useState('');
 
   return (
@@ -56,6 +58,18 @@ const Formulario = ({modalVisible}) => {
               value={email}
               onChangeText={setEmail}
             />
+          </View>
+
+          <View style={styles.campo}>
+            <Text style={styles.label}>Fecha Alta</Text>
+
+            <View style={styles.fechaContenedor}>
+              <DatePicker
+                date={fecha}
+                locale="es"
+                onDateChange={date => setFecha(date)}
+              />
+            </View>
           </View>
 
           <View style={styles.campo}>
@@ -119,6 +133,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 15,
     borderRadius: 10,
+  },
+  fechaContenedor: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
   },
 });
 
