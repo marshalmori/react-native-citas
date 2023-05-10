@@ -19,6 +19,7 @@ const Formulario = ({
   setPacientes,
   paciente: pacienteObj,
 }) => {
+  const [id, setId] = useState('');
   const [paciente, setPaciente] = useState('');
   const [proprietario, setProprietario] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +29,7 @@ const Formulario = ({
 
   useEffect(() => {
     if (Object.keys(pacienteObj).length > 0) {
+      setId(pacienteObj.id);
       setPaciente(pacienteObj.paciente);
       setProprietario(pacienteObj.proprietario);
       setEmail(pacienteObj.email);
