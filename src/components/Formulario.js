@@ -32,6 +32,7 @@ const Formulario = ({
     }
 
     const nuevoPaciente = {
+      id: Date.now(),
       paciente,
       proprietario,
       email,
