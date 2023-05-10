@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   Modal,
@@ -17,6 +17,7 @@ const Formulario = ({
   setModalVisible,
   pacientes,
   setPacientes,
+  paciente: pacienteObj,
 }) => {
   const [paciente, setPaciente] = useState('');
   const [proprietario, setProprietario] = useState('');
@@ -24,6 +25,17 @@ const Formulario = ({
   const [telefono, setTelefono] = useState('');
   const [fecha, setFecha] = useState(new Date());
   const [sintomas, setSintomas] = useState('');
+
+  useEffect(() => {
+    if (Object.keys(pacienteObj).length > 0) {
+      setPaciente(pacienteObj.paciente);
+      setProprietario(pacienteObj.proprietario);
+      setEmail(pacienteObj.email);
+      setTelefono(pacienteObj.telefono);
+      setFecha(pacienteObj.fecha);
+      setSintomas(pacienteObj.sintomas);
+    }
+  }, []);
 
   const handleCita = () => {
     if ([paciente, proprietario, email, fecha, sintomas].includes('')) {
