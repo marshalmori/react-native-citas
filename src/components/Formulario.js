@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Text,
   Modal,
+  Text,
   SafeAreaView,
   StyleSheet,
   TextInput,
@@ -14,14 +14,15 @@ import DatePicker from 'react-native-date-picker';
 
 const Formulario = ({
   modalVisible,
-  setModalVisible,
+  cerrarModal,
   pacientes,
   setPacientes,
   paciente: pacienteObj,
+  setPaciente: setPacienteApp,
 }) => {
   const [id, setId] = useState('');
   const [paciente, setPaciente] = useState('');
-  const [proprietario, setProprietario] = useState('');
+  const [propietario, setPropietario] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [fecha, setFecha] = useState(new Date());
@@ -31,35 +32,49 @@ const Formulario = ({
     if (Object.keys(pacienteObj).length > 0) {
       setId(pacienteObj.id);
       setPaciente(pacienteObj.paciente);
-      setProprietario(pacienteObj.proprietario);
+      setPropietario(pacienteObj.propietario);
       setEmail(pacienteObj.email);
       setTelefono(pacienteObj.telefono);
       setFecha(pacienteObj.fecha);
       setSintomas(pacienteObj.sintomas);
     }
-  }, []);
+  }, [pacienteObj]);
 
   const handleCita = () => {
-    if ([paciente, proprietario, email, fecha, sintomas].includes('')) {
+    // Validar
+    if ([paciente, propietario, email, fecha, sintomas].includes('')) {
       Alert.alert('Error', 'Todos los campos son obligatorios');
       return;
     }
 
+    // Revisar si es un registro nuevo o edición
     const nuevoPaciente = {
-      id: Date.now(),
       paciente,
-      proprietario,
+      propietario,
       email,
       telefono,
       fecha,
       sintomas,
     };
 
-    setPacientes([...pacientes, nuevoPaciente]);
-    setModalVisible(!modalVisible);
+    if (id) {
+      // Editando
+      nuevoPaciente.id = id;
 
+      const pacientesActualizados = pacientes.map(pacienteState =>
+        pacienteState.id === nuevoPaciente.id ? nuevoPaciente : pacienteState,
+      );
+      setPacientes(pacientesActualizados);
+      setPacienteApp({});
+    } else {
+      // Nuevo Registro
+      nuevoPaciente.id = Date.now();
+      setPacientes([...pacientes, nuevoPaciente]);
+    }
+    cerrarModal();
+    setId('');
     setPaciente('');
-    setProprietario('');
+    setPropietario('');
     setEmail('');
     setTelefono('');
     setFecha(new Date());
@@ -71,12 +86,23 @@ const Formulario = ({
       <SafeAreaView style={styles.contenido}>
         <ScrollView>
           <Text style={styles.titulo}>
-            Nueva {''} <Text style={styles.tituloBold}>Cita</Text>
+            {pacienteObj.id ? 'Editar' : 'Nueva'} {''}
+            <Text style={styles.tituloBold}>Cita</Text>
           </Text>
 
           <Pressable
             style={styles.btnCancelar}
-            onPress={() => setModalVisible(!modalVisible)}>
+            onLongPress={() => {
+              cerrarModal();
+              setPacienteApp({});
+              setId('');
+              setPaciente('');
+              setPropietario('');
+              setEmail('');
+              setTelefono('');
+              setFecha(new Date());
+              setSintomas('');
+            }}>
             <Text style={styles.btnCancelarTexto}>X Cancelar</Text>
           </Pressable>
 
@@ -92,25 +118,38 @@ const Formulario = ({
           </View>
 
           <View style={styles.campo}>
-            <Text style={styles.label}>Nombre Proprietario</Text>
+            <Text style={styles.label}>Nombre Propietario</Text>
             <TextInput
               style={styles.input}
-              placeholder="Nombre Proprietario"
+              placeholder="Nombre Propietario"
               placeholderTextColor={'#666'}
-              value={proprietario}
-              onChangeText={setProprietario}
+              value={propietario}
+              onChangeText={setPropietario}
             />
           </View>
 
           <View style={styles.campo}>
-            <Text style={styles.label}>Email Proprietário</Text>
+            <Text style={styles.label}>Email Propietario</Text>
             <TextInput
               style={styles.input}
-              placeholder="Email Proprietario"
+              placeholder="Email Propietario"
               placeholderTextColor={'#666'}
               keyboardType="email-address"
               value={email}
               onChangeText={setEmail}
+            />
+          </View>
+
+          <View style={styles.campo}>
+            <Text style={styles.label}>Teléfono Propietario</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Teléfono Propietario"
+              placeholderTextColor={'#666'}
+              keyboardType="number-pad"
+              value={telefono}
+              onChangeText={setTelefono}
+              maxLength={10}
             />
           </View>
 
@@ -120,7 +159,6 @@ const Formulario = ({
             <View style={styles.fechaContenedor}>
               <DatePicker
                 date={fecha}
-                mode="date"
                 locale="es"
                 onDateChange={date => setFecha(date)}
               />
@@ -128,23 +166,9 @@ const Formulario = ({
           </View>
 
           <View style={styles.campo}>
-            <Text style={styles.label}>Teléfono Proprietario</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Teléfono Proprietario"
-              placeholderTextColor={'#666'}
-              keyboardType="number-pad"
-              value={telefono}
-              onChangeText={setTelefono}
-              maxLength={11}
-            />
-          </View>
-
-          <View style={styles.campo}>
             <Text style={styles.label}>Síntomas</Text>
             <TextInput
-              style={styles.input}
-              placeholder="Síntomas"
+              style={[styles.input, styles.sintomasInput]}
               placeholderTextColor={'#666'}
               value={sintomas}
               onChangeText={setSintomas}
@@ -154,7 +178,9 @@ const Formulario = ({
           </View>
 
           <Pressable style={styles.btnNuevaCita} onPress={handleCita}>
-            <Text style={styles.btnNuevaCitaTexto}>Agregar Paciente</Text>
+            <Text style={styles.btnNuevaCitaTexto}>
+              {pacienteObj.id ? 'Editar' : 'Agregar'} Paciente
+            </Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>
@@ -172,13 +198,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     marginTop: 30,
-    color: '#fff',
+    color: '#FFF',
   },
   tituloBold: {
     fontWeight: '900',
   },
   btnCancelar: {
-    marginVertical: 20,
+    marginVertical: 30,
     backgroundColor: '#5827A4',
     marginHorizontal: 30,
     padding: 15,
@@ -196,20 +222,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   label: {
-    color: '#fff',
+    color: '#FFF',
     marginBottom: 10,
     marginTop: 15,
     fontSize: 20,
     fontWeight: '600',
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
     padding: 15,
     borderRadius: 10,
   },
+  sintomasInput: {
+    height: 100,
+  },
   fechaContenedor: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
   },
   btnNuevaCita: {
     marginVertical: 50,
@@ -219,11 +248,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   btnNuevaCitaTexto: {
-    textAlign: 'center',
     color: '#5827A4',
-    textTransform: 'uppercase',
+    textAlign: 'center',
     fontWeight: '900',
     fontSize: 16,
+    textTransform: 'uppercase',
   },
 });
 
